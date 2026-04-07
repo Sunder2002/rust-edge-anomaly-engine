@@ -8,8 +8,8 @@ on:
 
 env:
   CARGO_TERM_COLOR: always
-  # This tells the compiler where to find the 'translator' (libclang)
-  LIBCLANG_PATH: /usr/lib/llvm-14/lib 
+  # Proactive: Tell the opencv crate to look for system libraries via pkg-config
+  OPENCV_FOR_TAG: "4" 
 
 jobs:
   check:
@@ -18,20 +18,25 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # 1. Install LLVM/Clang properly (This solves the libclang error dynamically)
+      - name: Install LLVM and Clang
+        uses: KyleMayes/install-llvm-action@v2
+        with:
+          version: "16.0" # Use a stable, modern version
+
+      # 2. Install System-level dependencies
+      - name: Install Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake libopencv-dev libclang-dev pkg-config
+
+      # 3. Proactive: Cache the Rust build to save time on future pushes
+      - name: Rust Cache
+        uses: swatinem/rust-cache@v2
+
       - name: Install Rust Toolchain
         uses: dtolnay/rust-toolchain@stable
 
-      - name: Install System Dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            build-essential \
-            cmake \
-            git \
-            clang \
-            libclang-dev \
-            libopencv-dev \
-            pkg-config
-
+      # 4. Final Verification
       - name: Cargo Check
         run: cargo check
