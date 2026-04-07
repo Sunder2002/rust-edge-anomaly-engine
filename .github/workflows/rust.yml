@@ -1,6 +1,15 @@
 name: Rust CI
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  CARGO_TERM_COLOR: always
+  # This tells the compiler where to find the 'translator' (libclang)
+  LIBCLANG_PATH: /usr/lib/llvm-14/lib 
 
 jobs:
   check:
@@ -8,11 +17,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install Rust
-        run: rustup update stable
-      - name: Install Dependencies
+
+      - name: Install Rust Toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install System Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential cmake libopencv-dev clang pkg-config
+          sudo apt-get install -y \
+            build-essential \
+            cmake \
+            git \
+            clang \
+            libclang-dev \
+            libopencv-dev \
+            pkg-config
+
       - name: Cargo Check
         run: cargo check
