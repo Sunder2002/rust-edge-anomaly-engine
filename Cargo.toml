@@ -1,0 +1,24 @@
+[workspace]
+# This tells Rust: "Look into these folders for my sub-projects"
+members = [
+    "crates/common",
+    "crates/vision",
+    "crates/reasoning",
+    "crates/engine",
+    "crates/api",
+]
+resolver = "2"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+authors = ["Applied AI Engineer"]
+
+# We define versions here once so all crates stay in sync.
+# This prevents "Version Hell" where one part of the app uses 1.0 and another uses 2.0.
+[workspace.dependencies]
+tokio = { version = "1.36", features = ["full"] }
+anyhow = "1.0"
+thiserror = "1.0"
+serde = { version = "1.0", features = ["derive"] }
+chrono = { version = "0.4", features = ["serde"] }

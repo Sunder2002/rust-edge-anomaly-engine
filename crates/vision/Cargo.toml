@@ -1,0 +1,15 @@
+[package]
+name = "vision"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+# We need 'common' to use the Frame struct
+common = { path = "../common" }
+# We need 'opencv' to see the video
+opencv = { version = "0.92", default-features = false, features = ["videoio", "imgproc", "imgcodecs"] }
+# We need 'chrono' to timestamp the frames
+chrono = { workspace = true }
+# We need 'tokio' for future async work
+tokio = { workspace = true }
+tracing = "0.1"

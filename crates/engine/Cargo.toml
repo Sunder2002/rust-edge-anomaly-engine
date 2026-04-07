@@ -1,0 +1,10 @@
+[package]
+name = "engine"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+common = { path = "../common" }
+vision = { path = "../vision" }
+reasoning = { path = "../reasoning" }
+tokio.workspace = true

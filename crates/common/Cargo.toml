@@ -1,0 +1,10 @@
+[package]
+name = "common"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+# This tells the crate: "Use the version of these tools defined in the Mall Map"
+thiserror.workspace = true
+serde.workspace = true
+chrono.workspace = true
